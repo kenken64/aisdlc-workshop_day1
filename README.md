@@ -4,13 +4,14 @@ Snip is a tiny URL shortener that demonstrates a multi-project Git repository. O
 
 ## Projects and branches
 
-Each project lives at the root of its own orphan branch. The `main` branch is the superproject: its folders are submodules that pin specific commits from those branches.
+The backend, frontend, and CLI each live at the root of their own orphan branch. The `main` branch is the superproject: its folders are submodules that pin specific commits from those branches. A fourth branch, `bundle`, holds the generated release.
 
 | Folder | Branch | Stack | Purpose |
 | --- | --- | --- | --- |
 | `backend/` | `backend` | Bun, zero dependencies | API and short-link redirects |
 | `frontend/` | `frontend` | Angular 19 | Web interface |
 | `cli/` | `cli` | Node.js, zero dependencies | Terminal client |
+| `bundle/` | `bundle` | Generated Bun + web release | Single-process app and Docker image source |
 
 ## API contract
 
@@ -51,6 +52,16 @@ node cli.js open <code>
 ```
 
 Set `SNIP_API` to point the CLI at a different backend URL.
+
+## Generated bundle
+
+`bundle/` is generated output; do not edit it by hand. The build script updates the source submodules, builds Angular, and assembles the server, CLI, and web assets into the bundle branch:
+
+```sh
+node scripts/build-bundle.mjs
+```
+
+This commits the generated bundle and its updated pointer locally. Run the script again to confirm there is nothing to commit. Add `--push` to publish the bundle branch and push the updated `main` pointer. To run the assembled app, use `cd bundle && bun start`; it serves the API, redirects, and web UI on one port.
 
 ## Update a project
 
