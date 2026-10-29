@@ -1,0 +1,35 @@
+:root {
+	color-scheme: light;
+	--ink: #1c2d25;
+	--muted: #6d7a70;
+	--green: #27704f;
+	--line: #dce3db;
+	--surface: #ffffff;
+	background: #f4f6f1;
+	color: var(--ink);
+	font-family: "Avenir Next", "Segoe UI", sans-serif;
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	min-width: 320px;
+	min-height: 100vh;
+	margin: 0;
+}
+
+button,
+input {
+	font-family: inherit;
+}
+
+::selection {
+	background: #c9e2d0;
+	color: #173c2b;
+}

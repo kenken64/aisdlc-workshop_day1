@@ -1,0 +1,86 @@
+<main class="shell">
+  <header class="topbar">
+    <a class="wordmark" href="/" aria-label="Snip home">snip<span>.</span></a>
+    <p class="api-origin">API ORIGIN <code>localhost:3000</code></p>
+  </header>
+
+  <section class="workspace" aria-labelledby="page-title">
+    <div class="intro">
+      <p class="eyebrow">LINK WORKSPACE <span>01 / 01</span></p>
+      <h1 id="page-title">Make a link shorter.</h1>
+      <p class="intro-copy">Create a short link, then keep an eye on its traffic.</p>
+    </div>
+
+    <form class="shorten-form" novalidate (submit)="submitUrl($event)">
+      <label for="destination">Destination URL</label>
+      <div class="form-row">
+        <input
+          id="destination"
+          type="url"
+          inputmode="url"
+          autocomplete="url"
+          placeholder="https://example.com/a/very/long/address"
+          [value]="url()"
+          [disabled]="isSubmitting()"
+          (input)="onUrlInput($event)"
+        />
+        <button type="submit" [disabled]="isSubmitting()">
+          {{ isSubmitting() ? 'Shortening…' : 'Shorten link' }}
+        </button>
+      </div>
+    </form>
+
+    @if (error(); as message) {
+      <p class="notice error-notice" role="alert">{{ message }}</p>
+    }
+
+    @if (createdLink(); as created) {
+      <div class="notice success-notice" role="status">
+        <span>SHORT LINK CREATED</span>
+        <a [href]="created.shortUrl" target="_blank" rel="noopener noreferrer">
+          {{ created.shortUrl }}
+        </a>
+      </div>
+    }
+
+    <section class="links-section" aria-labelledby="links-title">
+      <div class="section-heading">
+        <h2 id="links-title">Your links</h2>
+        <span class="link-count">{{ links().length }} TOTAL</span>
+      </div>
+
+      @if (isLoading()) {
+        <p class="empty-state">Loading links…</p>
+      } @else if (links().length === 0) {
+        <p class="empty-state">No links yet. Your first one starts above.</p>
+      } @else {
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">SHORT CODE</th>
+                <th scope="col">DESTINATION</th>
+                <th scope="col" class="hits-column">HITS</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (link of links(); track link.code) {
+                <tr>
+                  <td>
+                    <a class="short-code" [href]="link.shortUrl" target="_blank" rel="noopener noreferrer">
+                      {{ link.code }}
+                    </a>
+                  </td>
+                  <td class="destination-cell">
+                    <a [href]="link.url" target="_blank" rel="noopener noreferrer">{{ link.url }}</a>
+                  </td>
+                  <td class="hits-column">{{ link.hits }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+  </section>
+</main>
